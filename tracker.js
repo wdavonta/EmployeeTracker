@@ -1,4 +1,5 @@
 const inquirer = require('inquirer');
+const mysql = require('mysql2');
 
 
 // Create the connection to database
@@ -26,21 +27,41 @@ function startPrompt() {
 
             typer: "list",
             message: "What would you like to do?",
-            name: "",
+            name: "choices",
             choices: [
-                "Add department",
-                "Add employee",
-                "Add role",
-                "Remove employee",
-                "Add role",
-                "Remove employee",
-                "Update employee role",
-                "View all departments",
-                "View all employees",
-                "View all employee by department",
-                "View all roles",
+                "View all departments?",
+                "View all roles?",
+                "View all employees?",
+                "Add a department?",
+                "Add an employee?",
+                "Add a role?",
+                "Update employee role?"           
             ]
         }
-    ])
+    ]).then(function(response) {
+        switch (response.choices) {
+            case "View all departments?":
+                viewAllDepartments();
+                break;
+            case "View all roles?":
+                viewAllRoles();
+                break;
+            case "View all employees?":
+                viewAllEmployees();
+                break;
+            case "Add a department?":
+                addDepartment();
+                break;
+            case "Add an employee?":
+                addEmployee();
+                break;
+            case "Add a role?":
+                addRole();
+                break;
+            case "Update employee role?":
+                updateRole();
+                break;
+            }
+    })
 
 }
