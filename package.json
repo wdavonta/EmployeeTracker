@@ -1,0 +1,23 @@
+{
+  "name": "employeetracker",
+  "version": "1.0.0",
+  "description": "Employee tracker",
+  "main": "tracker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wdavonta/EmployeeTracker.git"
+  },
+  "author": "DaVonta Williamson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wdavonta/EmployeeTracker/issues"
+  },
+  "homepage": "https://github.com/wdavonta/EmployeeTracker#readme",
+  "dependencies": {
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
+  }
+}
