@@ -3,6 +3,7 @@ const mysql = require('mysql');
 
 
 
+
 // Create the connection to database
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -10,8 +11,8 @@ const connection = mysql.createConnection({
     // Your MySQL username
     user: 'root',
     // Your MySQL password
-    password: 'Bereal21!',
-    database: 'employeedb'
+    password: 'password',
+    database: 'employee_db'
   });
 
   connection.connect(err => {
@@ -62,7 +63,7 @@ function startPrompt() {
                 addRole();
                 break;
             case "Update employee role?":
-                updateRole();
+                updateEmployeeRole();
                 break;
             }
     })
@@ -72,7 +73,7 @@ function startPrompt() {
 // View all Departments,all Roles ,
 
 function viewAllDepartments () {
-    connection.query ('SELECT department.name', function (err,res) {
+    connection.query ('SELECT * FROM department', function (err,res) {
     if (err) throw err;
     console.log(res);
  
@@ -81,7 +82,7 @@ function viewAllDepartments () {
 }
 
 function viewAllRoles() {
-    connection.query ('SELECT role.title, role.salary, role.department_id', function (err,res) {
+    connection.query ('SELECT * FROM role', function (err,res) {
     if (err) throw err; 
     console.log(res);   
 
@@ -90,7 +91,7 @@ function viewAllRoles() {
 
 
 function viewAllEmployees() {
-    connection.query ('SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name', function (err,res) {
+    connection.query ('SELECT * FROM employee', function (err,res) {
     if (err) throw err; 
     console.log(res);
     })  
@@ -104,7 +105,16 @@ function addDepartment() {
             name:'department',
             message: 'What department would you like to add?'
         }
-    ])   
+    ]).then(function(answer) {
+        connection.query('INSERT INTO department (name) VALUES (?)',
+        [answer.department], function(err,res) {
+            if (err) throw err; 
+            console.log(res);
+    
+        })
+    })
+}
+      
 // Add Employee, Role //
 
 function addEmployee() {
@@ -113,20 +123,39 @@ function addEmployee() {
     inquirer.prompt([
     {
         type: 'text',
-        name: 'name',
+        name: 'firstname',
         message: 'What is the employee first name?'
 
     },
     {
         type: 'text',
-        name: 'name',
+        name: 'lastname',
         message: 'What is the employee last name?'
+    },
+    {
+        type: 'text',
+        name: 'roleid',
+        message: 'What is the role id for employee?'
+    },
+    {
+        type: 'text',
+        name: 'managerid',
+        message: 'What is the employee manager id number?'
     }
-])
+    
+]).then(function(answer) {
+    connection.query('INSERT INTO employee (first_name, last_name, role_id, manager_ID) VALUES (?,?,?,?)',
+    [answer.firstname, answer.lastname, answer.roleid, answer.managerid], function(err,res) {
+        if (err) throw err; 
+        console.log(res);
+
+        });
+    })
+
+}
 
 function addRole() {
-    connection.query ('SELECT * FROM department', function (err,res) {
-    if (err) throw err;
+    
 
     inquirer.prompt ([
         {
@@ -141,26 +170,44 @@ function addRole() {
         },
         {
             type:'text',
-            name:'Department id',
+            name:'Departmentid',
             message: 'What is the department id?'
         }
-    ])
+    ]).then(function(answer) {
+        connection.query('INSERT INTO role (title, salary, department_id) VALUES (?,?,?)',
+        [answer.role, answer.salary, answer.Departmentid], function(err,res) {
+            if (err) throw err; 
+            console.log(res);
+    
+        })
+    });
+}
 
-// Update Employee//    
-function updateEmployee() {
-    connection.query ('SELECT employee.firstname', function (err,res) {
-    if (err) throw err;    
+
+// Update Employee//   
+//https://www.w3schools.com/nodejs/nodejs_mysql_update.asp//
+
+function updateEmployeeRole() {
+       
 
     inquirer.prompt ([
         {
             type:'text',
-            name:'update employee',
+            name:'updateemployee',
             message: 'What employee would you like to update?'
         },
         {
             type:'text',
-            name:'update role',
-            message: 'What role would you like to change it to?'
+            name:'updaterole',
+            message: 'What role would you like to change it to?',
+            
         }
-    ])
+    ]).then(function(answer) {
+        connection.query('UPDATE employee SET role_id=?',
+        [answer.updateemployee, answer.updaterole], function(err,res) {
+            if (err) throw err; 
+            console.log(res);
+    
+        })
+    })
 }
