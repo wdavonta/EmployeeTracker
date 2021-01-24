@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const mysql = require('mysql');
 
 
+
 // Create the connection to database
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -38,6 +39,8 @@ function startPrompt() {
                 "Update employee role?"           
             ]
         }
+
+    // https://www.w3schools.com/js/js_switch.asp//
     ]).then(function(response) {
         switch (response.choices) {
             case "View all departments?":
@@ -65,30 +68,32 @@ function startPrompt() {
     })
 
 }
+// https://www.w3schools.com/nodejs/nodejs_mysql_select.asp//
+// View all Departments,all Roles ,
 
 function viewAllDepartments () {
-    let query = 'SELECT * FROM DEPARTMENTS';
-    connection.query (query, function (err,res) {
+    connection.query ('SELECT department.name', function (err,res) {
     if (err) throw err;
-
+    console.log(res);
  
 
     })
 }
 
 function viewAllRoles() {
-    let query = 'SELECT * FROM ROLES';
-    connection.query (query, function (err,res) {
-    if (err) throw err;    
+    connection.query ('SELECT role.title, role.salary, role.department_id', function (err,res) {
+    if (err) throw err; 
+    console.log(res);   
 
     })
 }
 
 
 function viewAllEmployees() {
-    let query = 'SELECT * FROM EMPLOYEE';
-    connection.query (query, function (err,res) {
-    if (err) throw err;   
+    connection.query ('SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name', function (err,res) {
+    if (err) throw err; 
+    console.log(res);
+    })  
 }
 
 function addDepartment() {
@@ -100,11 +105,10 @@ function addDepartment() {
             message: 'What department would you like to add?'
         }
     ])   
-
+// Add Employee, Role //
 
 function addEmployee() {
-    connection.query (, function (err,res) {
-    if (err) throw err;
+    
 
     inquirer.prompt([
     {
@@ -121,7 +125,7 @@ function addEmployee() {
 ])
 
 function addRole() {
-    connection.query (, function (err,res) {
+    connection.query ('SELECT * FROM department', function (err,res) {
     if (err) throw err;
 
     inquirer.prompt ([
@@ -142,9 +146,9 @@ function addRole() {
         }
     ])
 
-    
+// Update Employee//    
 function updateEmployee() {
-    connection.query (, function (err,res) {
+    connection.query ('SELECT employee.firstname', function (err,res) {
     if (err) throw err;    
 
     inquirer.prompt ([
