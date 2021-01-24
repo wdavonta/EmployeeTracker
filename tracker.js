@@ -38,7 +38,8 @@ function startPrompt() {
                 "Add a department?",
                 "Add an employee?",
                 "Add a role?",
-                "Update employee role?"           
+                "Update employee role?",
+                "Exit"           
             ]
         }
 
@@ -66,6 +67,9 @@ function startPrompt() {
             case "Update employee role?":
                 updateEmployeeRole();
                 break;
+            case "Exit":
+                connection.end();
+                break;
             }
     })
 
@@ -77,6 +81,7 @@ function viewAllDepartments () {
     connection.query ('SELECT * FROM departments', function (err,res) {
     if (err) throw err;
     console.table(res);
+    startPrompt(); 
  
 
     })
@@ -200,16 +205,16 @@ function updateEmployeeRole() {
         {
             type:'text',
             name:'updateemployee',
-            message: 'What employee would you like to update?'
+            message: 'What employee would you like to update?(By ID) '
         },
         {
             type:'text',
             name:'updaterole',
-            message: 'What role would you like to change it to?',
+            message: 'What role would you like to change them to?'
             
         }
     ]).then(function(answer) {
-        connection.query('UPDATE employee SET role_id=?',
+        connection.query('UPDATE employee SET role_id=? WHERE id= ?',
         [answer.updateemployee, answer.updaterole], function(err,res) {
             if (err) throw err; 
             console.table(res);
@@ -218,3 +223,4 @@ function updateEmployeeRole() {
         })
     })
 }
+
